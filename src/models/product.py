@@ -4,6 +4,10 @@ import logging as lg
 _logger = lg.getLogger(__name__)
 
 class Product:
+    
+    """
+    class product model
+    """
     _es = None
     
     def __init__(self, site):

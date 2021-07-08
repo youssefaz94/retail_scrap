@@ -10,6 +10,10 @@ from src.scrappers.listings.zalandoListingScrapper import ZalandoListingScrapper
 
 
 class ScrapperFactory:
+    """
+    factory class to create scrappers for each of the sites
+    """
+    
     _site_scrappers = dict()
     
     def __init__(self):
@@ -32,8 +36,6 @@ class ScrapperFactory:
             }
         }
             
-        
-        
     def getInstances(self, site):
         return self._site_scrappers[site]
     

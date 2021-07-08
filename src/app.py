@@ -3,7 +3,9 @@ from src.utils.queryBuilder import QueryBuilder
 from src.db.ElasticsearchController import ElasticsearchController
 
 class AppHelper:
-    
+    """
+    a singleton app flask class helper contains the dynamic attributes
+    """
     _instance = None
     app = Flask(__name__)
     _es = ElasticsearchController.getInstance()
@@ -27,12 +29,16 @@ class AppHelper:
 
 
 class App:
-    
+    """
+    main flask server class
+    contains routes
+    """
     app = AppHelper.getInstance().get_app()
     
     def __init__(self, sites):
         AppHelper.getInstance().set_sites(sites)
     
+    # method to normalize the input attributes in the expected format
     @staticmethod
     def normalize(value):
         value = value.strip().replace("'","").replace("-","")
@@ -73,10 +79,10 @@ class App:
         list_results = list(filter(any, list_results))
         if list_results :return App.group_by_site(list_results) 
         else: return {}
-        
+    
+    # method used to group the values by site
     @staticmethod
     def group_by_site(list_results):
-        print(list_results)
         result = list_results.pop()
         result["sites"] = dict()
         result["sites"][result["site"]] = {"price":result["price"], "position": result["position"]}
