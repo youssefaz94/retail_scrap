@@ -35,14 +35,11 @@ def setup_logging():
     stream_handler.setFormatter(lg.Formatter(fmt))
     logger.addHandler(stream_handler)
 
-def start_loading(loader):
-    loader.start()
-
 def main():
     setup_logging()    
-    # loaders = [DataLoader(site) for site in sites]
-    # with Pool(5) as p:
-    #     p.map(start_loading, loaders)
+    loaders = [DataLoader(site) for site in sites]
+    for loader in loaders:
+        loader.start()
     app = App([site["site"] for site in sites])
     app.start()
 

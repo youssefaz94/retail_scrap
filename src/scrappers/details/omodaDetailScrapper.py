@@ -6,7 +6,6 @@ class OmodaDetailScrapper(DetailScrapper):
     
     def scrap(self, detail):
         soup = BeautifulSoup(detail["body"], features="html.parser")
-        # value = soup.find("main", {"id": '\\"detail\\"'}).get("data-google")
         value = soup.find("main", {"id": "detail"}).get("data-google")
         value = json.loads(value)
         return self.normalisation(value) 

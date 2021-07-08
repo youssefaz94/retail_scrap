@@ -69,13 +69,25 @@ class App:
     def get_prod_details(prod):
         App.normalize(prod)
         helper = AppHelper.getInstance()
-        # results = dict()
-        # for site in helper.get_sites():
-        #     re
-        helper.get_elastic().doc(index=helper.get_sites(), uid=prod)
+        list_results = [ helper.get_elastic().doc(index=site, uid=prod) for site in helper.get_sites()]
+        list_results = list(filter(any, list_results))
+        if list_results :return App.group_by_site(list_results) 
+        else: return {}
+        
+    @staticmethod
+    def group_by_site(list_results):
+        print(list_results)
+        result = list_results.pop()
+        result["sites"] = dict()
+        result["sites"][result["site"]] = {"price":result["price"], "position": result["position"]}
+        del result["site"]
+        del result["price"]
+        del result["position"]
+        for res in  list_results:
+            result["sites"][res["site"]] = {"price": res["price"], "position": res["position"]}
+        return result
     
     def start(self):
-        print(AppHelper.getInstance().get_sites())
         self.app.run(host='0.0.0.0', port=5000, debug=True)
         
     

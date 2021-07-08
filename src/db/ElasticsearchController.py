@@ -1,4 +1,5 @@
 from elasticsearch import Elasticsearch
+from src.utils.exceptionDecorators import elastic_queries_hander
 
 class ElasticsearchController:
     
@@ -21,22 +22,24 @@ class ElasticsearchController:
     
     def index_site(self, product, pid):
         site = product["site"]
-        del product["site"]
         self._elastico.index(index=site, id=pid, body=product)
     
     def index_brand(self, product, pid):
         brand = product["brand"]
-        del product["brand"]
         self._elastico.index(index=brand, id=pid, body=product)
     
     def index(self, product):
-        pId = product["id"]
-        del product["id"]
+        print(product)
+        pId = product["name"]
         self.index_brand(product=product, pid=pId)
         self.index_site(product=product, pid=pId)
     
+    @elastic_queries_hander
     def query(self, query, index):
-        return self._elastico.search(index=index, size=7000, body={"query": query})
+        res = self._elastico.search(index=index, size=7000, body={"query": query})
+        return res["hits"]
 
+    @elastic_queries_hander
     def doc(self, uid, index):
-        return self._elastico.get(index=index, id=uid)
+        res = self._elastico.get(index=index, id=uid)
+        return res["_source"]

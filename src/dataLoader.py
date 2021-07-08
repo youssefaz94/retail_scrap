@@ -62,10 +62,9 @@ class DataLoader:
         _logger.warn("Successfuly loaded {} products from {} into DB".format(len(self._products), self._site))
         
     def persist(self):
-        print(self._products)
         for pId, prod in self._products.items():
             if pId in self._positions.keys():
                 prod.add_attributes({"position": self._positions[pId]})
             else:
-                prod.add_attributes({"position": -1})
+                prod.add_attributes({"position": "-1"})
             prod.persist()
